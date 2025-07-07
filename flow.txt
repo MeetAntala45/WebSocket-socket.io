@@ -1,0 +1,50 @@
+client
+click
+socket.emit()    client
+socket.on()      server
+io.emit()        server
+socket.on()      client
+
+
+1. User Loads Chat App (Client Side)
+
+  const socket = io();
+
+
+2. Server Accepts Connection
+
+  io.on("connection", (socket) => {
+    console.log("Client connected:", socket.id);
+  });
+
+
+3. User Sends a Chat Message (Client Side)
+
+  sendBtn.addEventListener("click", () => {
+    const message = messageInput.value;
+    socket.emit("user-message", message);
+  });
+
+
+4. Server Receives the Message
+
+  socket.on("user-message", (msg) => {
+    console.log("Received:", msg);
+    io.emit("message", msg);
+  });
+
+
+5. All Clients Receive and Display the Message
+
+  socket.on("message", (msg) => {
+    const p = document.createElement("p");
+    p.innerText = msg;
+    allMessages.appendChild(p);
+  });
+
+
+6. User Disconnects
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
